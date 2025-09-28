@@ -1,0 +1,267 @@
+# PENKA SURVIVOR - DOCUMENTACIÓN TÉCNICA
+
+## ARQUITECTURA GENERAL
+
+La app está construida con Flutter siguiendo una arquitectura por capas limpia que separa responsabilidades:
+
+### ESTRUCTURA DE ARCHIVOS
+
+lib/
+├── main.dart                 # Punto de entrada de la app
+├── models.dart              # Modelos de datos (User, Team, Match, etc.)
+├── api_service.dart         # Servicios HTTP para backend
+├── login_screen.dart        # Pantalla de autenticación
+├── leagues_screen.dart      # Lista de ligas disponibles
+├── league_detail_screen.dart # Pantalla principal del juego
+└── game_modals.dart         # Modales de confirmación y feedback
+
+## FLUJO DE NAVEGACIÓN
+
+1. Login → 2. Leagues → 3. League Detail
+
+- LoginScreen: Autenticación con email/password
+- LeaguesScreen: Muestra ligas activas + disponibles para unirse
+- LeagueDetailScreen: Pantalla principal del juego con 3 tabs
+
+## MODELOS DE DATOS
+
+### User - Usuario del sistema
+class User {
+  String userId, name, email;
+  bool isTestUser;
+}
+
+### Team - Equipos de fútbol
+class Team {
+  String id, name, flag;  // flag = emoji de bandera
+}
+
+### Match - Partidos de la jornada
+class Match {
+  String matchId;
+  int week;           // Número de jornada
+  Team home, visitor; // Equipos local y visitante
+}
+
+### Survivor - Liga de supervivencia
+class Survivor {
+  String id, name, status;
+  int participants, currentWeek;
+  double prizePool;
+}
+
+### UserLeague - Participación del usuario en liga
+class UserLeague {
+  String leagueId, leagueName, status;
+  double lives, totalLives;    // Vidas actuales y totales
+  int position;               // Posición en tabla
+}
+
+## SERVICIOS API (api_service.dart)
+
+### Autenticación
+- login(email, password) → Autentica usuario
+
+### Gestión de Ligas
+- getAllSurvivors() → Lista todas las ligas
+- joinSurvivor(userId, survivorId) → Une usuario a liga
+- getUserInfo(userId) → Datos del usuario en todas sus ligas
+
+### Gameplay
+- makePick(matchId, teamId, userId) → Hace pick de equipo
+- getPredictions(survivorId) → Picks realizados
+- getResults(survivorId) → Resultados de partidos
+- getLeaderboard(survivorId) → Tabla de posiciones
+- processWeek() → Procesa todas las ligas (avanza semana)
+
+## PANTALLA PRINCIPAL (LeagueDetailScreen)
+
+### Estructura de 3 Tabs:
+
+#### 1. Tab "Por jugar"
+- Vista: Todas las jornadas agrupadas visualmente
+- Funcionalidad:
+  - Seleccionar equipos ganadores por jornada
+  - Jornada actual destacada en naranja
+  - Visual feedback para picks ya realizados (verde)
+  - Equipos clickeables con bordes naranjas
+  - RESTRICCIÓN: Solo permite picks en semana actual
+
+#### 2. Tab "Resultados"
+- Vista: Resultados reales de partidos jugados
+- Datos: Consume endpoint getResults()
+- Organización: Por jornadas con scores finales
+
+#### 3. Tab "Tabla"
+- Vista: Leaderboard de supervivientes
+- Datos: Ranking por vidas restantes
+- Info: Posición, nombre, vidas actuales
+
+### Header Dinámico (HeroHeader)
+- Información: Nombre liga, vidas usuario, posición, pozo premios
+- Botones funcionales:
+  - Back: Navega a pantalla anterior
+  - Share: SnackBar de compartir liga
+  - Info: Modal con datos de la liga
+
+### Botón Procesar Semana
+- FloatingActionButton que ejecuta processWeek()
+- Funcionalidad global: Procesa TODAS las ligas del sistema
+- Efectos: Avanza jornadas, evalúa picks, actualiza vidas
+- Manejo de errores: Detecta ligas finalizadas y muestra modales apropiados
+
+## MODALES DE FEEDBACK (game_modals.dart)
+
+Sistema completo de modales animados:
+
+### PickConfirmationModal
+- Uso: Confirmar selección de equipo
+- Mensaje: "Esta acción es irreversible"
+
+### PickSuccessModal
+- Uso: Pick guardado exitosamente
+- Visual: Checkmark verde con animación
+
+### PickErrorModal
+- Uso: Error al guardar pick
+- Visual: X roja con mensaje de error
+
+### EliminationModal (showNoLivesLeft)
+- Uso: Usuario eliminado (0 vidas)
+- Visual: Skull con efecto dramático
+- Se muestra automáticamente cuando userLives <= 0
+
+### WinnerModal
+- Uso: Usuario ganó la liga (último superviviente o líder al final)
+- Visual: Trofeo dorado con mensaje de felicitación
+- Condiciones: (activePlayers == 1 && userLives > 0) || (gameFinished && userPosition == 1)
+
+### MissedDeadlineModal
+- Uso: No hizo pick a tiempo
+- Visual: Clock con penalización de vida
+
+### LeagueFinishedModal
+- Uso: Liga terminada sin ganador claro
+- Visual: Bandera final con mensaje informativo
+
+## GESTIÓN DE ESTADO
+
+### StatefulWidgets principales:
+- LoginScreen: Maneja form validation y loading states
+- LeaguesScreen: Gestiona lista de ligas y joins
+- LeagueDetailScreen: Estado complejo con múltiples datos (matches, predictions, leaderboard, etc.)
+
+### Patrón de carga de datos:
+// Patrón usado en league_detail_screen.dart
+Future<void> loadLeagueData() async {
+  // Carga paralela de múltiples endpoints
+  final futures = await Future.wait([
+    ApiService.getMatches(),
+    ApiService.getPredictions(),
+    ApiService.getLeaderboard(),
+    ApiService.getResults()
+  ]);
+  // Actualiza estado con setState()
+}
+
+## CARACTERÍSTICAS TÉCNICAS CLAVE
+
+### Responsive Design
+- SingleChildScrollView + ConstrainedBox para teclado virtual
+- SafeArea para notch/status bar
+- MediaQuery para dimensiones dinámicas
+
+### Gestión de Errores
+- try-catch en todos los servicios HTTP
+- Exception personalizado con mensajes específicos
+- Loading states con CircularProgressIndicator
+- Manejo especial de errores 400 para ligas finalizadas
+- Detección automática de eliminación/ganador al procesar semanas
+
+### Optimizaciones
+- Factory constructors para parsing JSON eficiente
+- Future.wait() para requests paralelos
+- ListView.builder para listas grandes optimizadas
+
+### Tipado Fuerte
+- Models tipados en lugar de Map<String, dynamic>
+- Null safety completo con ? operators
+- Type conversion seguro (int vs double para vidas)
+
+## FLUJO DE DATOS COMPLETO
+
+1. Login → Almacena User en memoria
+2. LeaguesScreen → Carga ligas disponibles + del usuario
+3. Join Liga → Actualiza estado y navega a detalle
+4. LeagueDetail → Carga paralela de 4 endpoints
+5. Pick Selection → Confirma, envía, actualiza UI
+6. Process Week → Procesa globalmente, recarga datos
+
+## RESTRICCIONES DE SEGURIDAD
+
+### Picks restringidos a semana actual
+- Lógica: isCurrentWeek = match.week == currentWeek
+- UI: Equipos de semanas pasadas/futuras en gris
+- Funcionalidad: onTap deshabilitado para semanas no actuales
+
+### Estilo visual diferenciado
+- Semana actual: Borde naranja, clickeable
+- Otras semanas: Borde gris, no clickeable
+- Pick realizado: Verde con borde grueso
+
+La app mantiene consistencia de datos recargando información después de cada acción crítica, asegurando que la UI siempre refleje el estado real del backend.
+
+## MEJORAS Y FIXES IMPLEMENTADOS
+
+### Sincronización de currentWeek
+- Fix crítico: makePick usa currentWeek dinámico en lugar de widget.league.currentWeek
+- Actualización: currentWeek se sincroniza después de processWeek()
+- Navegación: Checks de mounted() previenen errores de contexto
+
+### Jornadas colapsables (ExpansionTile)
+- UI: Cada jornada se puede expandir/contraer independientemente
+- Estado: Cada jornada mantiene su propio estado de expansión
+- Visual: Jornada actual siempre visible y destacada en naranja
+- UX: Reduce scroll vertical y mejora navegación entre jornadas
+
+### Restricciones de unión a ligas
+- Lógica: No se puede unir a ligas que ya comenzaron (currentWeek > 1)
+- UI: Botón rojo con texto "Liga ya comenzó" para ligas iniciadas
+- Visual: Contraste mejorado para diferenciación clara
+
+### Modales de fin de juego
+- Detección automática de eliminación cuando userLives <= 0
+- Modal de ganador cuando solo queda 1 jugador activo o juego terminado en posición #1
+- Manejo especial de errores 400 para mostrar modales apropiados en lugar de errores genéricos
+
+## ENDPOINTS UTILIZADOS
+
+Base URL: http://localhost:4300/api/survivor
+
+### Autenticación
+POST /login
+
+### Ligas
+GET /all-survivors
+POST /join/{survivorId}
+GET /user-info/{userId}
+
+### Gameplay
+POST /make-pick
+GET /predictions/{survivorId}
+GET /results/{survivorId}
+GET /leaderboard/{survivorId}
+
+### Simulación
+POST /simulation/run-week (procesa todas las ligas)
+
+## CONFIGURACIÓN DEL PROYECTO
+
+### Dependencias principales (pubspec.yaml)
+- flutter: SDK de Flutter
+- http: Peticiones HTTP al backend
+
+### Configuración
+- uses-material-design: true
+- Sin assets externos (iconos Material incluidos)
+- Compatible con Chrome y Windows (desarrollo)

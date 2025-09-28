@@ -1,0 +1,593 @@
+{
+	"info": {
+		"name": "Survivor API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Survivor Routes",
+			"item": [
+				{
+					"name": "0. Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"alex@test.com\",\n  \"password\": \"123456\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:4300/api/survivor/login",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "4300",
+							"path": ["api", "survivor", "login"]
+						}
+					},
+					"response": [
+						{
+							"name": "Login Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"alex@test.com\",\n  \"password\": \"123456\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/survivor/login",
+									"protocol": "http",
+									"host": ["localhost"],
+									"port": "4300",
+									"path": ["api", "survivor", "login"]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n  \"message\": \"Login successful\",\n  \"user\": {\n    \"userId\": \"1\",\n    \"name\": \"Alex Martinez\",\n    \"email\": \"alex@test.com\",\n    \"isTestUser\": true\n  }\n}"
+						}
+					]
+				},
+				{
+					"name": "0.1. Get User Info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4300/api/survivor/user/{{userId}}",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "4300",
+							"path": ["api", "survivor", "user", "{{userId}}"]
+						}
+					},
+					"response": [
+						{
+							"name": "Get User Info Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:4300/api/survivor/user/1",
+									"protocol": "http",
+									"host": ["localhost"],
+									"port": "4300",
+									"path": ["api", "survivor", "user", "1"]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n  \"userId\": \"1\",\n  \"name\": \"Alex Martinez\",\n  \"email\": \"alex@test.com\",\n  \"isTestUser\": true,\n  \"leagues\": [\n    {\n      \"survivorId\": \"68d32c5d6ba317c88ffd362b\",\n      \"survivorName\": \"Liga Premier 2025\",\n      \"status\": \"active\",\n      \"lives\": 3,\n      \"joinedAt\": \"2025-01-15T10:00:00.000Z\",\n      \"eliminatedAt\": null,\n      \"currentWeek\": 1,\n      \"totalWeeks\": 2,\n      \"prizePool\": 100,\n      \"leagueStatus\": \"active\",\n      \"totalPicks\": 1,\n      \"wins\": 0,\n      \"losses\": 0\n    }\n  ],\n  \"totalLeagues\": 1,\n  \"activeLeagues\": 1,\n  \"eliminatedLeagues\": 0\n}"
+						}
+					]
+				},
+				{
+					"name": "0.2. Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": \"{{userId}}\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:4300/api/survivor/logout",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "4300",
+							"path": ["api", "survivor", "logout"]
+						}
+					},
+					"response": [
+						{
+							"name": "Logout Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"userId\": \"1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/survivor/logout",
+									"protocol": "http",
+									"host": ["localhost"],
+									"port": "4300",
+									"path": ["api", "survivor", "logout"]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n  \"message\": \"Logout successful\",\n  \"userId\": \"1\"\n}"
+						}
+					]
+				},
+				{
+					"name": "1. Get All Survivors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4300/api/survivor",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "4300",
+							"path": ["api", "survivor"]
+						}
+					},
+					"response": [
+						{
+							"name": "Get All Survivors Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:4300/api/survivor",
+									"protocol": "http",
+									"host": ["localhost"],
+									"port": "4300",
+									"path": ["api", "survivor"]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "[\n  {\n    \"_id\": \"68d32c5d6ba317c88ffd362b\",\n    \"name\": \"Liga Premier 2025\",\n    \"competition\": [\n      {\n        \"matchId\": \"1\",\n        \"home\": {\n          \"name\": \"Manchester United\",\n          \"flag\": \"🏴󠁧󠁢󠁥󠁮󠁧󠁿\",\n          \"_id\": \"68d32c5d6ba317c88ffd362d\"\n        },\n        \"visitor\": {\n          \"name\": \"Liverpool\",\n          \"flag\": \"🏴󠁧󠁢󠁥󠁮󠁧󠁿\",\n          \"_id\": \"68d32c5d6ba317c88ffd362e\"\n        },\n        \"week\": 1,\n        \"finished\": false,\n        \"_id\": \"68d32c5d6ba317c88ffd362c\"\n      }\n    ],\n    \"startDate\": \"2025-01-15T00:00:00.000Z\",\n    \"lives\": 3,\n    \"currentWeek\": 1,\n    \"totalWeeks\": 2,\n    \"prizePool\": 0,\n    \"status\": \"upcoming\"\n  }\n]"
+						}
+					]
+				},
+				{
+					"name": "2. Join Survivor",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": \"1\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:4300/api/survivor/join/{{survivorId}}",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "4300",
+							"path": ["api", "survivor", "join", "{{survivorId}}"]
+						}
+					},
+					"response": [
+						{
+							"name": "Join Survivor Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"userId\": \"1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/survivor/join/68d32c5d6ba317c88ffd362b",
+									"protocol": "http",
+									"host": ["localhost"],
+									"port": "4300",
+									"path": ["api", "survivor", "join", "68d32c5d6ba317c88ffd362b"]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n  \"message\": \"Successfully joined survivor\",\n  \"data\": {\n    \"gambleId\": \"68d32c5d6ba317c88ffd3665\",\n    \"survivorName\": \"Liga Premier 2025\",\n    \"lives\": 3,\n    \"status\": \"active\",\n    \"prizePool\": 100\n  }\n}"
+						}
+					]
+				},
+				{
+					"name": "3. Make Pick",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": \"1\",\n  \"survivorId\": \"{{survivorId}}\",\n  \"matchId\": \"1\",\n  \"predictedTeamId\": \"{{teamId}}\",\n  \"week\": 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:4300/api/survivor/pick",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "4300",
+							"path": ["api", "survivor", "pick"]
+						}
+					},
+					"response": [
+						{
+							"name": "Make Pick Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"userId\": \"1\",\n  \"survivorId\": \"68d32c5d6ba317c88ffd362b\",\n  \"matchId\": \"1\",\n  \"predictedTeamId\": \"68d32c5d6ba317c88ffd362d\",\n  \"week\": 1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/survivor/pick",
+									"protocol": "http",
+									"host": ["localhost"],
+									"port": "4300",
+									"path": ["api", "survivor", "pick"]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n  \"message\": \"Pick submitted successfully\",\n  \"data\": {\n    \"predictionId\": \"68d32c5d6ba317c88ffd3666\",\n    \"matchId\": \"1\",\n    \"predictedTeamId\": \"68d32c5d6ba317c88ffd362d\",\n    \"week\": 1,\n    \"pickedAt\": \"2025-01-15T10:30:00.000Z\"\n  }\n}"
+						}
+					]
+				},
+				{
+					"name": "4. Get Leaderboard",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4300/api/survivor/leaderboard/{{survivorId}}",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "4300",
+							"path": ["api", "survivor", "leaderboard", "{{survivorId}}"]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Leaderboard Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:4300/api/survivor/leaderboard/68d32c5d6ba317c88ffd362b",
+									"protocol": "http",
+									"host": ["localhost"],
+									"port": "4300",
+									"path": ["api", "survivor", "leaderboard", "68d32c5d6ba317c88ffd362b"]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n  \"survivorName\": \"Liga Premier 2025\",\n  \"prizePool\": 100,\n  \"currentWeek\": 1,\n  \"status\": \"active\",\n  \"leaderboard\": [\n    {\n      \"userId\": \"1\",\n      \"name\": \"Alex Martinez\",\n      \"lives\": 3,\n      \"status\": \"active\",\n      \"joinedAt\": \"2025-01-15T10:00:00.000Z\",\n      \"eliminatedAt\": null,\n      \"totalPicks\": 1,\n      \"wins\": 0,\n      \"losses\": 0\n    }\n  ]\n}"
+						}
+					]
+				},
+				{
+					"name": "5. Get Test Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4300/api/survivor/test-users",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "4300",
+							"path": ["api", "survivor", "test-users"]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Test Users Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:4300/api/survivor/test-users",
+									"protocol": "http",
+									"host": ["localhost"],
+									"port": "4300",
+									"path": ["api", "survivor", "test-users"]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "[\n  {\n    \"_id\": \"68d32c5d6ba317c88ffd3667\",\n    \"userId\": \"1\",\n    \"name\": \"Alex Martinez\",\n    \"email\": \"alex@test.com\",\n    \"password\": \"123456\",\n    \"isTestUser\": true\n  },\n  {\n    \"_id\": \"68d32c5d6ba317c88ffd3668\",\n    \"userId\": \"2\",\n    \"name\": \"Sofia Rodriguez\",\n    \"email\": \"sofia@test.com\",\n    \"password\": \"123456\",\n    \"isTestUser\": true\n  }\n]"
+						}
+					]
+				},
+				{
+					"name": "6. Get Gambles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4300/api/survivor/gambles/{{survivorId}}",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "4300",
+							"path": ["api", "survivor", "gambles", "{{survivorId}}"]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Gambles Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:4300/api/survivor/gambles/68d32c5d6ba317c88ffd362b",
+									"protocol": "http",
+									"host": ["localhost"],
+									"port": "4300",
+									"path": ["api", "survivor", "gambles", "68d32c5d6ba317c88ffd362b"]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "[\n  {\n    \"_id\": \"68d32c5d6ba317c88ffd3665\",\n    \"userId\": \"1\",\n    \"survivorId\": \"68d32c5d6ba317c88ffd362b\",\n    \"lives\": 3,\n    \"status\": \"active\",\n    \"joinedAt\": \"2025-01-15T10:00:00.000Z\",\n    \"eliminatedAt\": null\n  }\n]"
+						}
+					]
+				},
+				{
+					"name": "7. Get Match Results",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4300/api/survivor/results/{{survivorId}}",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "4300",
+							"path": ["api", "survivor", "results", "{{survivorId}}"]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Match Results Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:4300/api/survivor/results/68d32c5d6ba317c88ffd362b",
+									"protocol": "http",
+									"host": ["localhost"],
+									"port": "4300",
+									"path": ["api", "survivor", "results", "68d32c5d6ba317c88ffd362b"]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n  \"survivorId\": \"68d32c5d6ba317c88ffd362b\",\n  \"survivorName\": \"Liga Premier 2025\",\n  \"currentWeek\": 1,\n  \"totalWeeks\": 2,\n  \"matches\": [\n    {\n      \"matchId\": \"1\",\n      \"homeTeam\": {\n        \"id\": \"68d32c5d6ba317c88ffd362d\",\n        \"name\": \"Manchester United\",\n        \"flag\": \"🏴󠁧󠁢󠁥󠁮󠁧󠁿\"\n      },\n      \"visitorTeam\": {\n        \"id\": \"68d32c5d6ba317c88ffd362e\",\n        \"name\": \"Liverpool\",\n        \"flag\": \"🏴󠁧󠁢󠁥󠁮󠁧󠁿\"\n      },\n      \"week\": 1,\n      \"result\": \"home\",\n      \"finished\": true,\n      \"winnerTeamName\": \"Manchester United\",\n      \"predictions\": [\n        {\n          \"userId\": \"1\",\n          \"userName\": \"Alex Martinez\",\n          \"predictedTeamId\": \"68d32c5d6ba317c88ffd362d\",\n          \"predictedTeamName\": \"Manchester United\",\n          \"result\": \"win\",\n          \"pickedAt\": \"2025-01-15T10:30:00.000Z\"\n        }\n      ],\n      \"totalPredictions\": 1,\n      \"correctPredictions\": 1,\n      \"incorrectPredictions\": 0,\n      \"drawPredictions\": 0\n    }\n  ],\n  \"totalMatches\": 6,\n  \"finishedMatches\": 1,\n  \"pendingMatches\": 5\n}"
+						}
+					]
+				},
+				{
+					"name": "8. Get Predictions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4300/api/survivor/predictions/{{survivorId}}",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "4300",
+							"path": ["api", "survivor", "predictions", "{{survivorId}}"]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Predictions Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:4300/api/survivor/predictions/68d32c5d6ba317c88ffd362b",
+									"protocol": "http",
+									"host": ["localhost"],
+									"port": "4300",
+									"path": ["api", "survivor", "predictions", "68d32c5d6ba317c88ffd362b"]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "[\n  {\n    \"_id\": \"68d32c5d6ba317c88ffd3666\",\n    \"userId\": \"1\",\n    \"survivorId\": \"68d32c5d6ba317c88ffd362b\",\n    \"matchId\": \"1\",\n    \"predictedTeamId\": \"68d32c5d6ba317c88ffd362d\",\n    \"week\": 1,\n    \"result\": null,\n    \"pickedAt\": \"2025-01-15T10:30:00.000Z\"\n  }\n]"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Simulation Routes",
+			"item": [
+				{
+					"name": "9. Setup Test Users",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4300/api/simulation/setup-test/{{survivorId}}",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "4300",
+							"path": ["api", "simulation", "setup-test", "{{survivorId}}"]
+						}
+					},
+					"response": [
+						{
+							"name": "Setup Test Users Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:4300/api/simulation/setup-test/68d32c5d6ba317c88ffd362b",
+									"protocol": "http",
+									"host": ["localhost"],
+									"port": "4300",
+									"path": ["api", "simulation", "setup-test", "68d32c5d6ba317c88ffd362b"]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n  \"message\": \"Test users setup completed successfully\",\n  \"data\": {\n    \"survivorId\": \"68d32c5d6ba317c88ffd362b\",\n    \"usersJoined\": 3,\n    \"picksGenerated\": 3\n  }\n}"
+						}
+					]
+				},
+				{
+					"name": "10. Run Week Simulation",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"loggedUserId\": \"1\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:4300/api/simulation/run-week/{{survivorId}}",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "4300",
+							"path": ["api", "simulation", "run-week", "{{survivorId}}"]
+						}
+					},
+					"response": [
+						{
+							"name": "Run Week Simulation Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"loggedUserId\": \"1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4300/api/simulation/run-week/68d32c5d6ba317c88ffd362b",
+									"protocol": "http",
+									"host": ["localhost"],
+									"port": "4300",
+									"path": ["api", "simulation", "run-week", "68d32c5d6ba317c88ffd362b"]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n  \"message\": \"Week simulation completed successfully\",\n  \"data\": {\n    \"survivorId\": \"68d32c5d6ba317c88ffd362b\",\n    \"week\": 1,\n    \"matchesSimulated\": 3,\n    \"playersEliminated\": 1,\n    \"playersRemaining\": 2,\n    \"nextWeek\": 2\n  }\n}"
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "survivorId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "teamId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "userId",
+			"value": "1",
+			"type": "string"
+		}
+	]
+}
